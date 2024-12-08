@@ -19,6 +19,8 @@
 
 #include "SoftBodyBox.hpp"
 
+#include "game/Init.hpp"
+
 int main()
 {
     ES::Engine::Registry registry;
@@ -38,17 +40,14 @@ int main()
         CAMERA_PERSPECTIVE
     };
 
+    registry.RegisterSystem<ES::Engine::Scheduler::Startup>(Game::Init);
+
     registry.RegisterSystem(ES::Plugin::Physics::System::DeleteSoftBodyCollisions);
     registry.RegisterSystem(ES::Plugin::Physics::System::VelocityIntegration);
     registry.RegisterSystem(ES::Plugin::Physics::System::DetectSoftBodyCollisions);
     registry.RegisterSystem(ES::Plugin::Physics::System::ApplySoftBodyCollisions);
+
     registry.RegisterSystem(Raylib::GlobalRenderer);
-
-    auto softBodyBox = Objects::CreateSoftBodyBox(registry, glm::vec3(-2, 7, 2), glm::vec3(1, 1, 1));
-
-    ES::Engine::Entity ground = registry.CreateEntity();
-    registry.GetRegistry().emplace<ES::Plugin::Object::Component::Transform>(ground, glm::vec3(0, 0, 0));
-    registry.GetRegistry().emplace<ES::Plugin::Physics::Component::BoxCollider3D>(ground, glm::vec3(20, 1, 20));
 
     while (!WindowShouldClose())
     {
