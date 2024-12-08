@@ -16,6 +16,9 @@ namespace Objects
         std::vector<ES::Engine::Entity> entities;
 
         void RotateFromPitchYawRoll(ES::Engine::Registry &registry, float pitch, float yaw, float roll);
+
+        glm::vec3 GetMiddlePoint(ES::Engine::Registry &registry) const;
+        glm::vec3 GetVelocity(ES::Engine::Registry &registry) const;
     };
 
     ES::Engine::Entity CreateSoftBodyBox(ES::Engine::Registry &registry, const glm::vec3 &position, const glm::vec3 &size);

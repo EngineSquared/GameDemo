@@ -1,6 +1,8 @@
 #include <GLFW/glfw3.h>
 
-#include <raylib.h>
+namespace Raylib {
+    #include <raylib.h>
+}
 
 #include <iostream>
 #include <chrono>
@@ -20,50 +22,34 @@
 #include "SoftBodyBox.hpp"
 
 #include "game/Init.hpp"
+#include "game/MovePlayer.hpp"
+#include "game/UpdateCamera.hpp"
 
 int main()
 {
     ES::Engine::Registry registry;
 
-    const int screenWidth = 1280;
-    const int screenHeight = 720;
-
-    InitWindow(screenWidth, screenHeight, "esq game");
-    DisableCursor();
-    SetTargetFPS(60);
-
-    Camera3D raylibCam = {
-        {10, 10, 10},
-        {0,  0,  0 },
-        {0,  1,  0 },
-        45.0f,
-        CAMERA_PERSPECTIVE
-    };
-
+    registry.RegisterSystem<ES::Engine::Scheduler::Startup>(Raylib::InitRenderer);
     registry.RegisterSystem<ES::Engine::Scheduler::Startup>(Game::Init);
 
-    registry.RegisterSystem(ES::Plugin::Physics::System::DeleteSoftBodyCollisions);
-    registry.RegisterSystem(ES::Plugin::Physics::System::VelocityIntegration);
-    registry.RegisterSystem(ES::Plugin::Physics::System::DetectSoftBodyCollisions);
-    registry.RegisterSystem(ES::Plugin::Physics::System::ApplySoftBodyCollisions);
+    // TODO: I don't know if this should be updated using relative time or not
+    // for the future we should implement groupsets
+    registry.RegisterSystem(Game::MovePlayer);
+    registry.RegisterSystem(Game::UpdateCamera);
+
+    registry.RegisterSystem<ES::Engine::Scheduler::RelativeTimeUpdate>(ES::Plugin::Physics::System::VelocityIntegration);
+    registry.RegisterSystem<ES::Engine::Scheduler::RelativeTimeUpdate>(ES::Plugin::Physics::System::DetectSoftBodyCollisions);
+    registry.RegisterSystem<ES::Engine::Scheduler::RelativeTimeUpdate>(ES::Plugin::Physics::System::ApplySoftBodyCollisions);
+    registry.RegisterSystem<ES::Engine::Scheduler::RelativeTimeUpdate>(ES::Plugin::Physics::System::DeleteSoftBodyCollisions);
 
     registry.RegisterSystem(Raylib::GlobalRenderer);
 
-    while (!WindowShouldClose())
-    {
-        BeginDrawing();
-        ClearBackground(BLACK);
-        UpdateCamera(&raylibCam, CAMERA_FREE);
-
-        BeginMode3D(raylibCam);
-
+    do {
         registry.RunSystems();
-
-        EndMode3D();
-        EndDrawing();
     }
+    while (!Raylib::WindowShouldClose());
 
-    CloseWindow();
+    Raylib::CloseWindow();
 
     return 0;
 }

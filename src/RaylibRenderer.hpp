@@ -11,5 +11,8 @@ namespace Raylib {
     void BoxColliderRenderer(ES::Engine::Registry &registry);
     void FakeMeshRenderer(ES::Engine::Registry &registry);
 
+    Camera3D FindRaylibCamera(ES::Engine::Registry &registry);
+
+    void InitRenderer(ES::Engine::Registry &registry);
     void GlobalRenderer(ES::Engine::Registry &registry);
 }

@@ -20,6 +20,36 @@ void Objects::SoftBodyBox::RotateFromPitchYawRoll(ES::Engine::Registry &registry
     }
 }
 
+glm::vec3 Objects::SoftBodyBox::GetMiddlePoint(ES::Engine::Registry &registry) const
+{
+    glm::vec3 middlePoint(0.f);
+
+    for (auto entity : entities)
+    {
+        auto &transform = registry.GetRegistry().get<ES::Plugin::Object::Component::Transform>(entity);
+        middlePoint += transform.position;
+    }
+
+    middlePoint /= entities.size();
+
+    return middlePoint;
+}
+
+glm::vec3 Objects::SoftBodyBox::GetVelocity(ES::Engine::Registry &registry) const
+{
+    glm::vec3 velocity(0.f);
+
+    for (auto entity : entities)
+    {
+        auto &node = registry.GetRegistry().get<ES::Plugin::Physics::Component::SoftBodyNode>(entity);
+        velocity += node.velocity;
+    }
+
+    velocity /= entities.size();
+
+    return velocity;
+}
+
 static ES::Engine::Entity CreateParticle(ES::Engine::Registry &registry, const glm::vec3 &position, float mass = 1.f,
                                          float damping = 0.999f, float friction = 10.f, float elasticity = 0.1f)
 {
@@ -91,17 +121,17 @@ static std::vector<ES::Engine::Entity> CreateBoxParticles(ES::Engine::Registry &
 
     // 6 Face diagonal springs, mesh-like
     CreateSpring(registry, entities[0], entities[2], stiffness, damping, glm::sqrt(size.x * size.x + size.z * size.z));
-    // CreateSpring(registry, entities[1], entities[3], stiffness, damping, glm::sqrt(size.x * size.x + size.z * size.z));
+    CreateSpring(registry, entities[1], entities[3], stiffness, damping, glm::sqrt(size.x * size.x + size.z * size.z));
     CreateSpring(registry, entities[4], entities[6], stiffness, damping, glm::sqrt(size.x * size.x + size.z * size.z));
-    // CreateSpring(registry, entities[5], entities[7], stiffness, damping, glm::sqrt(size.x * size.x + size.z * size.z));
+    CreateSpring(registry, entities[5], entities[7], stiffness, damping, glm::sqrt(size.x * size.x + size.z * size.z));
     CreateSpring(registry, entities[0], entities[5], stiffness, damping, glm::sqrt(size.x * size.x + size.y * size.y));
-    // CreateSpring(registry, entities[1], entities[4], stiffness, damping, glm::sqrt(size.x * size.x + size.y * size.y));
+    CreateSpring(registry, entities[1], entities[4], stiffness, damping, glm::sqrt(size.x * size.x + size.y * size.y));
     CreateSpring(registry, entities[2], entities[7], stiffness, damping, glm::sqrt(size.x * size.x + size.y * size.y));
-    // CreateSpring(registry, entities[3], entities[6], stiffness, damping, glm::sqrt(size.x * size.x + size.y * size.y));
+    CreateSpring(registry, entities[3], entities[6], stiffness, damping, glm::sqrt(size.x * size.x + size.y * size.y));
     CreateSpring(registry, entities[0], entities[7], stiffness, damping, glm::sqrt(size.z * size.z + size.y * size.y));
-    // CreateSpring(registry, entities[1], entities[6], stiffness, damping, glm::sqrt(size.z * size.z + size.y * size.y));
+    CreateSpring(registry, entities[1], entities[6], stiffness, damping, glm::sqrt(size.z * size.z + size.y * size.y));
     CreateSpring(registry, entities[2], entities[5], stiffness, damping, glm::sqrt(size.z * size.z + size.y * size.y));
-    // CreateSpring(registry, entities[3], entities[4], stiffness, damping, glm::sqrt(size.z * size.z + size.y * size.y));
+    CreateSpring(registry, entities[3], entities[4], stiffness, damping, glm::sqrt(size.z * size.z + size.y * size.y));
 
     // Create fake meshes
     CreateBoxFakeMesh(registry, {entities[0], entities[1], entities[2]});
