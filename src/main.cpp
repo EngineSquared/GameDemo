@@ -42,9 +42,9 @@ int main()
     registry.RegisterSystem(ES::Plugin::Physics::System::VelocityIntegration);
     registry.RegisterSystem(ES::Plugin::Physics::System::DetectSoftBodyCollisions);
     registry.RegisterSystem(ES::Plugin::Physics::System::ApplySoftBodyCollisions);
+    registry.RegisterSystem(Raylib::GlobalRenderer);
 
     auto softBodyBox = Objects::CreateSoftBodyBox(registry, glm::vec3(-2, 7, 2), glm::vec3(1, 1, 1));
-    registry.GetRegistry().get<Objects::SoftBodyBox>(softBodyBox).RotateFromPitchYawRoll(registry, 20, 40, 0);
 
     ES::Engine::Entity ground = registry.CreateEntity();
     registry.GetRegistry().emplace<ES::Plugin::Object::Component::Transform>(ground, glm::vec3(0, 0, 0));
@@ -52,15 +52,13 @@ int main()
 
     while (!WindowShouldClose())
     {
-        registry.RunSystems();
-
         BeginDrawing();
         ClearBackground(BLACK);
         UpdateCamera(&raylibCam, CAMERA_FREE);
 
         BeginMode3D(raylibCam);
 
-        Raylib::GlobalRenderer(registry);
+        registry.RunSystems();
 
         EndMode3D();
         EndDrawing();
