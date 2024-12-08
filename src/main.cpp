@@ -8,8 +8,6 @@
 #include "Registry.hpp"
 #include "BoxCollider3D.hpp"
 #include "Camera3D.hpp"
-#include "RealTimeProvider.hpp"
-#include "RealTimeUpdater.hpp"
 #include "SoftBodyCollision.hpp"
 #include "SoftBodyNode.hpp"
 #include "SoftBodySpring.hpp"
@@ -41,9 +39,6 @@ int main()
     };
 
     registry.RegisterSystem(ES::Plugin::Physics::System::DeleteSoftBodyCollisions);
-    registry.RegisterResource<ES::Plugin::Time::Resource::RealTimeProvider>(
-        ES::Plugin::Time::Resource::RealTimeProvider());
-    registry.RegisterSystem(ES::Plugin::Time::System::RealTimeUpdater);
     registry.RegisterSystem(ES::Plugin::Physics::System::VelocityIntegration);
     registry.RegisterSystem(ES::Plugin::Physics::System::DetectSoftBodyCollisions);
     registry.RegisterSystem(ES::Plugin::Physics::System::ApplySoftBodyCollisions);
