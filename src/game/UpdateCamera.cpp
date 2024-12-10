@@ -23,7 +23,7 @@ void Game::UpdateCamera(ES::Engine::Registry &registry)
     const float sensitivity = 0.005f;
 
     auto md = Raylib::GetMouseDelta();
-    float mouseDeltaX = md.x;
+    float mouseDeltaX = -md.x;
     float mouseDeltaY = md.y;
 
     angleX += mouseDeltaX * sensitivity;
