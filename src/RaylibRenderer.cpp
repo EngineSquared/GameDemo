@@ -117,11 +117,9 @@ void Raylib::GlobalRenderer(ES::Engine::Registry &registry)
 
     BeginMode3D(FindRaylibCamera(registry));
 
-    SoftBodySpringRenderer(registry);
+    // SoftBodySpringRenderer(registry);
     BoxColliderRenderer(registry);
     FakeMeshRenderer(registry);
-
-    DrawGrid(50, 1.0f);
 
     EndMode3D();
     EndDrawing();
