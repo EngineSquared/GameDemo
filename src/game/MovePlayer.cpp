@@ -57,7 +57,21 @@ void Game::MovePlayer(ES::Engine::Registry& registry)
     }
 
     auto movement = GetPlayerMovement(cameraForward, cameraRight);
-    auto view = registry.GetRegistry().view<Game::PlayerTag, Objects::SoftBodyBox>();
+
+    if (Raylib::IsKeyPressed(Raylib::KEY_SPACE)) {
+        auto view = registry.GetRegistry().view<Game::Player>();
+
+        for (auto entity : view)
+        {
+            auto &player = view.get<Game::Player>(entity);
+            if (player.CanJump()) {
+                player.Jump();
+                movement.y = 800.f;
+            }
+        }
+    }
+
+    auto view = registry.GetRegistry().view<Game::Player, Objects::SoftBodyBox>();
 
     // TODO: replace with a max speed component or add it to player
     constexpr float MAX_XZ_SPEED = 10.f;
@@ -80,10 +94,10 @@ void Game::MovePlayer(ES::Engine::Registry& registry)
                 xzSpeed = glm::normalize(xzSpeed) * MAX_XZ_SPEED;
             }
 
-            if (glm::abs(node.velocity.y) > MAX_Y_SPEED)
-            {
-                node.velocity.y = glm::sign(node.velocity.y) * MAX_Y_SPEED;
-            }
+            // if (glm::abs(node.velocity.y) > MAX_Y_SPEED)
+            // {
+            //     node.velocity.y = glm::sign(node.velocity.y) * MAX_Y_SPEED;
+            // }
 
             node.velocity = glm::vec3(xzSpeed.x, node.velocity.y, xzSpeed.z);
         }

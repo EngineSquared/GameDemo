@@ -9,5 +9,5 @@
 void Game::InitPlayer(ES::Engine::Registry& registry)
 {
     auto player = Objects::CreateSoftBodyBox(registry, glm::vec3(-2, 7, 2), glm::vec3(1, 1, 1));
-    registry.GetRegistry().emplace<Game::PlayerTag>(player);
+    registry.GetRegistry().emplace<Game::Player>(player);
 }

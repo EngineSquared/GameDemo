@@ -7,7 +7,7 @@
 
 void Game::UpdateCamera(ES::Engine::Registry &registry)
 {
-    auto view = registry.GetRegistry().view<Game::PlayerTag, Objects::SoftBodyBox>();
+    auto view = registry.GetRegistry().view<Game::Player, Objects::SoftBodyBox>();
     glm::vec3 middlePos;
     glm::vec3 gVelocity;
 

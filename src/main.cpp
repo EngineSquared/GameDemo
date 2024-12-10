@@ -34,8 +34,8 @@ int main()
 
     // TODO: I don't know if this should be updated using relative time or not
     // for the future we should implement groupsets
-    registry.RegisterSystem(Game::MovePlayer);
     registry.RegisterSystem(Game::UpdateCamera);
+    registry.RegisterSystem(Game::MovePlayer);
 
     registry.RegisterSystem<ES::Engine::Scheduler::RelativeTimeUpdate>(ES::Plugin::Physics::System::VelocityIntegration);
     registry.RegisterSystem<ES::Engine::Scheduler::RelativeTimeUpdate>(ES::Plugin::Physics::System::DetectSoftBodyCollisions);
