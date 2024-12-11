@@ -18,8 +18,8 @@ void Game::UpdateCamera(ES::Engine::Registry &registry)
         gVelocity = box.GetVelocity(registry);
     }
 
-    static float angleX = 0.0f;
-    static float angleY = 0.0f;
+    static float angleX = 90.0f;
+    static float angleY = 90.0f;
     const float sensitivity = 0.005f;
 
     auto md = Raylib::GetMouseDelta();

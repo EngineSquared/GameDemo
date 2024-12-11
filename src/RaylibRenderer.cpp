@@ -71,8 +71,12 @@ void Raylib::FakeMeshRenderer(ES::Engine::Registry &registry)
         Vector3 positionB = {transformB.position.x, transformB.position.y, transformB.position.z};
         Vector3 positionC = {transformC.position.x, transformC.position.y, transformC.position.z};
 
-        DrawTriangle3D(positionA, positionB, positionC, GREEN);
-        DrawTriangle3D(positionC, positionB, positionA, GREEN);
+        DrawTriangle3D(positionA, positionB, positionC, LIGHTGRAY);
+        DrawTriangle3D(positionC, positionB, positionA, LIGHTGRAY);
+
+        DrawLine3D(positionA, positionB, ORANGE);
+        DrawLine3D(positionB, positionC, ORANGE);
+        DrawLine3D(positionC, positionA, ORANGE);
     }
 }
 
