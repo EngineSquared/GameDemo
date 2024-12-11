@@ -9,7 +9,7 @@ namespace Game {
         bool CanJump() {
             auto now = std::chrono::system_clock::now();
             auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastJump).count();
-            return diff >= 300;
+            return diff >= 800;
         }
 
         void Jump() {

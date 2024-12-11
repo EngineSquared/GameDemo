@@ -10,6 +10,8 @@
 #include "Physics.hpp"
 #include "SoftBodyBox.hpp"
 
+#include "game/Obstacle.hpp"
+
 void Raylib::SoftBodySpringRenderer(ES::Engine::Registry &registry)
 {
     // View of node springs
@@ -45,7 +47,17 @@ void Raylib::BoxColliderRenderer(ES::Engine::Registry &registry)
         Vector3 position = {transform.position.x, transform.position.y, transform.position.z};
         Vector3 size = {boxCollider.size.x, boxCollider.size.y, boxCollider.size.z};
 
-        DrawCubeV(position, size, GRAY);
+        auto hasObstacle = registry.GetRegistry().try_get<Game::Obstacle>(entity);
+
+        if (hasObstacle != nullptr) {
+            DrawCubeV(position, size, LIGHTGRAY);
+            DrawCubeWiresV(position, size, DARKBLUE);
+        }
+        else
+        {
+            DrawCubeV(position, size, DARKGRAY);
+            DrawCubeWiresV(position, size, RED);
+        }
     }
 }
 
@@ -71,12 +83,12 @@ void Raylib::FakeMeshRenderer(ES::Engine::Registry &registry)
         Vector3 positionB = {transformB.position.x, transformB.position.y, transformB.position.z};
         Vector3 positionC = {transformC.position.x, transformC.position.y, transformC.position.z};
 
-        DrawTriangle3D(positionA, positionB, positionC, LIGHTGRAY);
-        DrawTriangle3D(positionC, positionB, positionA, LIGHTGRAY);
+        DrawTriangle3D(positionA, positionB, positionC, BLUE);
+        DrawTriangle3D(positionC, positionB, positionA, BLUE);
 
-        DrawLine3D(positionA, positionB, ORANGE);
-        DrawLine3D(positionB, positionC, ORANGE);
-        DrawLine3D(positionC, positionA, ORANGE);
+        DrawLine3D(positionA, positionB, RED);
+        DrawLine3D(positionB, positionC, RED);
+        DrawLine3D(positionC, positionA, RED);
     }
 }
 
@@ -117,7 +129,7 @@ Raylib::Camera3D Raylib::FindRaylibCamera(ES::Engine::Registry &registry)
 void Raylib::GlobalRenderer(ES::Engine::Registry &registry)
 {
     BeginDrawing();
-    ClearBackground(Raylib::BLACK);
+    ClearBackground(BLACK);
 
     BeginMode3D(FindRaylibCamera(registry));
 

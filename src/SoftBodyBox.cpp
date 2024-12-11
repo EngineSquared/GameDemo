@@ -51,7 +51,7 @@ glm::vec3 Objects::SoftBodyBox::GetVelocity(ES::Engine::Registry &registry) cons
 }
 
 static ES::Engine::Entity CreateParticle(ES::Engine::Registry &registry, const glm::vec3 &position, float mass = 1.f,
-                                         float damping = 0.999f, float friction = 10.f, float elasticity = 0.1f)
+                                         float damping = 0.999f, float friction = 8.f, float elasticity = 0.02f)
 {
     ES::Engine::Entity entity = registry.CreateEntity();
 
@@ -62,7 +62,7 @@ static ES::Engine::Entity CreateParticle(ES::Engine::Registry &registry, const g
 }
 
 static ES::Engine::Entity CreateSpring(ES::Engine::Registry &registry, ES::Engine::Entity nodeA, ES::Engine::Entity nodeB,
-                                       float stiffness = 1, float damping = 0.99f, float restLength = 1)
+                                       float stiffness = 3.f, float damping = 0.99f, float restLength = 1)
 {
     ES::Engine::Entity entity = registry.CreateEntity();
 
