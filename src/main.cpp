@@ -25,6 +25,17 @@ namespace Raylib {
 #include "game/MovePlayer.hpp"
 #include "game/UpdateCamera.hpp"
 
+// While we wait for real groupsets
+void UpdateGroupSet(ES::Engine::Registry &registry)
+{
+    Game::UpdateCamera(registry);
+    Game::MovePlayer(registry);
+    ES::Plugin::Physics::System::VelocityIntegration(registry);
+    ES::Plugin::Physics::System::DetectSoftBodyCollisions(registry);
+    ES::Plugin::Physics::System::ApplySoftBodyCollisions(registry);
+    ES::Plugin::Physics::System::DeleteSoftBodyCollisions(registry);
+}
+
 int main()
 {
     ES::Engine::Registry registry;
@@ -32,15 +43,7 @@ int main()
     registry.RegisterSystem<ES::Engine::Scheduler::Startup>(Raylib::InitRenderer);
     registry.RegisterSystem<ES::Engine::Scheduler::Startup>(Game::Init);
 
-    // TODO: I don't know if this should be updated using relative time or not
-    // for the future we should implement groupsets
-    registry.RegisterSystem(Game::UpdateCamera);
-    registry.RegisterSystem(Game::MovePlayer);
-
-    registry.RegisterSystem<ES::Engine::Scheduler::RelativeTimeUpdate>(ES::Plugin::Physics::System::VelocityIntegration);
-    registry.RegisterSystem<ES::Engine::Scheduler::RelativeTimeUpdate>(ES::Plugin::Physics::System::DetectSoftBodyCollisions);
-    registry.RegisterSystem<ES::Engine::Scheduler::RelativeTimeUpdate>(ES::Plugin::Physics::System::ApplySoftBodyCollisions);
-    registry.RegisterSystem<ES::Engine::Scheduler::RelativeTimeUpdate>(ES::Plugin::Physics::System::DeleteSoftBodyCollisions);
+    registry.RegisterSystem<ES::Engine::Scheduler::RelativeTimeUpdate>(UpdateGroupSet);
 
     registry.RegisterSystem(Raylib::GlobalRenderer);
 
