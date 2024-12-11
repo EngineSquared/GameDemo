@@ -47,9 +47,7 @@ void Raylib::BoxColliderRenderer(ES::Engine::Registry &registry)
         Vector3 position = {transform.position.x, transform.position.y, transform.position.z};
         Vector3 size = {boxCollider.size.x, boxCollider.size.y, boxCollider.size.z};
 
-        auto hasObstacle = registry.GetRegistry().try_get<Game::Obstacle>(entity);
-
-        if (hasObstacle != nullptr) {
+        if (ES::Engine::Entity(entity).HasComponents<Game::Obstacle>(registry)) {
             DrawCubeV(position, size, LIGHTGRAY);
             DrawCubeWiresV(position, size, DARKBLUE);
         }
