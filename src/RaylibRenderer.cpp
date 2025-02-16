@@ -12,18 +12,18 @@
 
 #include "game/Obstacle.hpp"
 
-void Raylib::SoftBodySpringRenderer(ES::Engine::Registry &registry)
+void Raylib::SoftBodySpringRenderer(ES::Engine::Core &core)
 {
     // View of node springs
-    auto springView = registry.GetRegistry().view<ES::Plugin::Physics::Component::SoftBodySpring>();
+    auto springView = core.GetRegistry().view<ES::Plugin::Physics::Component::SoftBodySpring>();
 
     for (auto entity : springView)
     {
         auto &spring = springView.get<ES::Plugin::Physics::Component::SoftBodySpring>(entity);
-        auto &nodeA = registry.GetRegistry().get<ES::Plugin::Physics::Component::SoftBodyNode>(spring.entityNodeA);
-        auto &nodeB = registry.GetRegistry().get<ES::Plugin::Physics::Component::SoftBodyNode>(spring.entityNodeB);
-        auto &transformA = registry.GetRegistry().get<ES::Plugin::Object::Component::Transform>(spring.entityNodeA);
-        auto &transformB = registry.GetRegistry().get<ES::Plugin::Object::Component::Transform>(spring.entityNodeB);
+        auto &nodeA = core.GetRegistry().get<ES::Plugin::Physics::Component::SoftBodyNode>(spring.entityNodeA);
+        auto &nodeB = core.GetRegistry().get<ES::Plugin::Physics::Component::SoftBodyNode>(spring.entityNodeB);
+        auto &transformA = core.GetRegistry().get<ES::Plugin::Object::Component::Transform>(spring.entityNodeA);
+        auto &transformB = core.GetRegistry().get<ES::Plugin::Object::Component::Transform>(spring.entityNodeB);
 
         Vector3 rbAvec = {transformA.position.x, transformA.position.y, transformA.position.z};
         Vector3 rbBvec = {transformB.position.x, transformB.position.y, transformB.position.z};
@@ -32,11 +32,11 @@ void Raylib::SoftBodySpringRenderer(ES::Engine::Registry &registry)
     }
 }
 
-void Raylib::BoxColliderRenderer(ES::Engine::Registry &registry)
+void Raylib::BoxColliderRenderer(ES::Engine::Core &core)
 {
     // View of box colliders
     auto boxColliderView =
-        registry.GetRegistry()
+        core.GetRegistry()
             .view<ES::Plugin::Physics::Component::BoxCollider3D, ES::Plugin::Object::Component::Transform>();
 
     for (auto entity : boxColliderView)
@@ -47,7 +47,7 @@ void Raylib::BoxColliderRenderer(ES::Engine::Registry &registry)
         Vector3 position = {transform.position.x, transform.position.y, transform.position.z};
         Vector3 size = {boxCollider.size.x, boxCollider.size.y, boxCollider.size.z};
 
-        if (ES::Engine::Entity(entity).HasComponents<Game::Obstacle>(registry)) {
+        if (ES::Engine::Entity(entity).HasComponents<Game::Obstacle>(core)) {
             DrawCubeV(position, size, LIGHTGRAY);
             DrawCubeWiresV(position, size, DARKBLUE);
         }
@@ -59,10 +59,10 @@ void Raylib::BoxColliderRenderer(ES::Engine::Registry &registry)
     }
 }
 
-void Raylib::FakeMeshRenderer(ES::Engine::Registry &registry)
+void Raylib::FakeMeshRenderer(ES::Engine::Core &core)
 {
     // View of fake meshes
-    auto fakeMeshView = registry.GetRegistry().view<Objects::SoftBodyBoxMesh>();
+    auto fakeMeshView = core.GetRegistry().view<Objects::SoftBodyBoxMesh>();
 
     for (auto entity : fakeMeshView)
     {
@@ -73,9 +73,9 @@ void Raylib::FakeMeshRenderer(ES::Engine::Registry &registry)
             continue;
         }
 
-        auto &transformA = registry.GetRegistry().get<ES::Plugin::Object::Component::Transform>(fakeMesh.entities[0]);
-        auto &transformB = registry.GetRegistry().get<ES::Plugin::Object::Component::Transform>(fakeMesh.entities[1]);
-        auto &transformC = registry.GetRegistry().get<ES::Plugin::Object::Component::Transform>(fakeMesh.entities[2]);
+        auto &transformA = core.GetRegistry().get<ES::Plugin::Object::Component::Transform>(fakeMesh.entities[0]);
+        auto &transformB = core.GetRegistry().get<ES::Plugin::Object::Component::Transform>(fakeMesh.entities[1]);
+        auto &transformC = core.GetRegistry().get<ES::Plugin::Object::Component::Transform>(fakeMesh.entities[2]);
 
         Vector3 positionA = {transformA.position.x, transformA.position.y, transformA.position.z};
         Vector3 positionB = {transformB.position.x, transformB.position.y, transformB.position.z};
@@ -90,7 +90,7 @@ void Raylib::FakeMeshRenderer(ES::Engine::Registry &registry)
     }
 }
 
-void Raylib::InitRenderer(ES::Engine::Registry &registry)
+void Raylib::InitRenderer(ES::Engine::Core &core)
 {
     const int screenWidth = 1280;
     const int screenHeight = 720;
@@ -107,13 +107,13 @@ void Raylib::InitRenderer(ES::Engine::Registry &registry)
         Raylib::CAMERA_PERSPECTIVE
     };
 
-    auto cameraEntity = registry.CreateEntity();
-    registry.GetRegistry().emplace<Raylib::Camera3D>(cameraEntity, raylibCam);
+    auto cameraEntity = core.CreateEntity();
+    core.GetRegistry().emplace<Raylib::Camera3D>(cameraEntity, raylibCam);
 }
 
-Raylib::Camera3D Raylib::FindRaylibCamera(ES::Engine::Registry &registry)
+Raylib::Camera3D Raylib::FindRaylibCamera(ES::Engine::Core &core)
 {
-    auto view = registry.GetRegistry().view<Raylib::Camera3D>();
+    auto view = core.GetRegistry().view<Raylib::Camera3D>();
 
     for (auto entity : view)
     {
@@ -124,16 +124,16 @@ Raylib::Camera3D Raylib::FindRaylibCamera(ES::Engine::Registry &registry)
     return Raylib::Camera3D();
 }
 
-void Raylib::GlobalRenderer(ES::Engine::Registry &registry)
+void Raylib::GlobalRenderer(ES::Engine::Core &core)
 {
     BeginDrawing();
     ClearBackground(BLACK);
 
-    BeginMode3D(FindRaylibCamera(registry));
+    BeginMode3D(FindRaylibCamera(core));
 
-    // SoftBodySpringRenderer(registry);
-    BoxColliderRenderer(registry);
-    FakeMeshRenderer(registry);
+    // SoftBodySpringRenderer(core);
+    BoxColliderRenderer(core);
+    FakeMeshRenderer(core);
 
     EndMode3D();
     EndDrawing();

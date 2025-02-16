@@ -29,9 +29,9 @@ static glm::vec3 GetPlayerMovement(const glm::vec3& cameraForward, const glm::ve
     return movement;
 }
 
-void Game::MovePlayer(ES::Engine::Registry& registry)
+void Game::MovePlayer(ES::Engine::Core& core)
 {
-    auto cameraView = registry.GetRegistry().view<Raylib::Camera3D>();
+    auto cameraView = core.GetRegistry().view<Raylib::Camera3D>();
 
     if (cameraView.size() != 1)
     {
@@ -59,7 +59,7 @@ void Game::MovePlayer(ES::Engine::Registry& registry)
     auto movement = GetPlayerMovement(cameraForward, cameraRight);
 
     if (Raylib::IsKeyPressed(Raylib::KEY_SPACE)) {
-        auto view = registry.GetRegistry().view<Game::Player>();
+        auto view = core.GetRegistry().view<Game::Player>();
 
         for (auto entity : view)
         {
@@ -71,7 +71,7 @@ void Game::MovePlayer(ES::Engine::Registry& registry)
         }
     }
 
-    auto view = registry.GetRegistry().view<Game::Player, Objects::SoftBodyBox>();
+    auto view = core.GetRegistry().view<Game::Player, Objects::SoftBodyBox>();
 
     // TODO: replace with a max speed component or add it to player
     constexpr float MAX_XZ_SPEED = 10.f;
@@ -84,7 +84,7 @@ void Game::MovePlayer(ES::Engine::Registry& registry)
 
         for (auto particle : box.entities)
         {
-            auto &node = registry.GetRegistry().get<ES::Plugin::Physics::Component::SoftBodyNode>(particle);
+            auto &node = core.GetRegistry().get<ES::Plugin::Physics::Component::SoftBodyNode>(particle);
             node.ApplyForce(movement);
 
             glm::vec3 xzSpeed = glm::vec3(node.velocity.x, 0, node.velocity.z);

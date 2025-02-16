@@ -24,12 +24,12 @@ static int RandomInt(int min, int max, int step = 1)
     return dis(gen) / step * step;
 }
 
-void Game::InitTerrain(ES::Engine::Registry& registry)
+void Game::InitTerrain(ES::Engine::Core& core)
 {
-    ES::Engine::Entity ground = registry.CreateEntity();
+    ES::Engine::Entity ground = core.CreateEntity();
 
-    registry.GetRegistry().emplace<ES::Plugin::Object::Component::Transform>(ground, glm::vec3(0, 0, 0));
-    registry.GetRegistry().emplace<ES::Plugin::Physics::Component::BoxCollider3D>(ground, glm::vec3(40, 1, 40));
+    core.GetRegistry().emplace<ES::Plugin::Object::Component::Transform>(ground, glm::vec3(0, 0, 0));
+    core.GetRegistry().emplace<ES::Plugin::Physics::Component::BoxCollider3D>(ground, glm::vec3(40, 1, 40));
 
     for (int i = 0; i < 15; i++)
     {
@@ -37,15 +37,15 @@ void Game::InitTerrain(ES::Engine::Registry& registry)
 
         for (int j = 0; j < 6; j++)
         {
-            ES::Engine::Entity terrainBox = registry.CreateEntity();
+            ES::Engine::Entity terrainBox = core.CreateEntity();
 
-            registry.GetRegistry().emplace<Game::Obstacle>(terrainBox);
+            core.GetRegistry().emplace<Game::Obstacle>(terrainBox);
 
             glm::vec3 position = glm::vec3(RandomInt(-20, 20, 2), yPos, RandomInt(-20, 20, 2));
             glm::vec3 size = glm::vec3(RandomFloat(2.5f, 4.f), 1, RandomFloat(2.5f, 4.f));
 
-            registry.GetRegistry().emplace<ES::Plugin::Object::Component::Transform>(terrainBox, position);
-            registry.GetRegistry().emplace<ES::Plugin::Physics::Component::BoxCollider3D>(terrainBox, size);
+            core.GetRegistry().emplace<ES::Plugin::Object::Component::Transform>(terrainBox, position);
+            core.GetRegistry().emplace<ES::Plugin::Physics::Component::BoxCollider3D>(terrainBox, size);
         }
     }
 }

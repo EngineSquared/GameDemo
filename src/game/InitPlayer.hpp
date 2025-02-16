@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Registry.hpp"
+#include "Core.hpp"
 
 namespace Game {
-    void InitPlayer(ES::Engine::Registry& registry);
+    void InitPlayer(ES::Engine::Core& core);
 }

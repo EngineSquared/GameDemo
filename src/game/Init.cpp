@@ -1,7 +1,7 @@
 #include "Init.hpp"
 
-void Game::Init(ES::Engine::Registry& registry)
+void Game::Init(ES::Engine::Core& core)
 {
-    InitPlayer(registry);
-    InitTerrain(registry);
+    InitPlayer(core);
+    InitTerrain(core);
 }

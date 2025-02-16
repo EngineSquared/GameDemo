@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Registry.hpp"
+#include "Core.hpp"
 
 namespace Raylib {
     #include "raylib.h"
@@ -9,5 +9,5 @@ namespace Raylib {
 #include <glm/glm.hpp>
 
 namespace Game {
-    void UpdateCamera(ES::Engine::Registry& registry);
+    void UpdateCamera(ES::Engine::Core& core);
 }

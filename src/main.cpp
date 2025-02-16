@@ -7,7 +7,7 @@ namespace Raylib {
 #include <iostream>
 #include <chrono>
 
-#include "Registry.hpp"
+#include "Core.hpp"
 #include "BoxCollider3D.hpp"
 #include "Camera3D.hpp"
 #include "SoftBodyCollision.hpp"
@@ -26,29 +26,29 @@ namespace Raylib {
 #include "game/UpdateCamera.hpp"
 
 // While we wait for real groupsets
-void UpdateGroupSet(ES::Engine::Registry &registry)
+void UpdateGroupSet(ES::Engine::Core &core)
 {
-    Game::UpdateCamera(registry);
-    Game::MovePlayer(registry);
-    ES::Plugin::Physics::System::VelocityIntegration(registry);
-    ES::Plugin::Physics::System::DetectSoftBodyCollisions(registry);
-    ES::Plugin::Physics::System::ApplySoftBodyCollisions(registry);
-    ES::Plugin::Physics::System::DeleteSoftBodyCollisions(registry);
+    Game::UpdateCamera(core);
+    Game::MovePlayer(core);
+    ES::Plugin::Physics::System::VelocityIntegration(core);
+    ES::Plugin::Physics::System::DetectSoftBodyCollisions(core);
+    ES::Plugin::Physics::System::ApplySoftBodyCollisions(core);
+    ES::Plugin::Physics::System::DeleteSoftBodyCollisions(core);
 }
 
 int main()
 {
-    ES::Engine::Registry registry;
+    ES::Engine::Core core;
 
-    registry.RegisterSystem<ES::Engine::Scheduler::Startup>(Raylib::InitRenderer);
-    registry.RegisterSystem<ES::Engine::Scheduler::Startup>(Game::Init);
+    core.RegisterSystem<ES::Engine::Scheduler::Startup>(Raylib::InitRenderer);
+    core.RegisterSystem<ES::Engine::Scheduler::Startup>(Game::Init);
 
-    registry.RegisterSystem<ES::Engine::Scheduler::RelativeTimeUpdate>(UpdateGroupSet);
+    core.RegisterSystem<ES::Engine::Scheduler::RelativeTimeUpdate>(UpdateGroupSet);
 
-    registry.RegisterSystem(Raylib::GlobalRenderer);
+    core.RegisterSystem(Raylib::GlobalRenderer);
 
     do {
-        registry.RunSystems();
+        core.RunSystems();
     }
     while (!Raylib::WindowShouldClose());
 

@@ -4,5 +4,5 @@
 #include "InitTerrain.hpp"
 
 namespace Game {
-    void Init(ES::Engine::Registry& registry);
+    void Init(ES::Engine::Core& core);
 }
